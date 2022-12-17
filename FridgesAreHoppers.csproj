@@ -7,8 +7,8 @@
     <ProjectGuid>{ADFDEBAE-00E1-41F1-ADC5-4EA141E5EC50}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ColdHopper</RootNamespace>
-    <AssemblyName>ColdHopper</AssemblyName>
+    <RootNamespace>FridgesAreHoppers</RootNamespace>
+    <AssemblyName>FridgesAreHoppers</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -61,8 +61,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HarmonyPatch.cs" />
+    <Compile Include="Source\HarmonyPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Patches\patch.TE.FridgesAreHoppers.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
