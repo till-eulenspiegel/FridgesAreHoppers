@@ -25,36 +25,46 @@ namespace FridgesAreHoppers
             h.PatchAll(Assembly.GetExecutingAssembly());
         }
 
+        public static List<Thing> findFeedsInHopper(Thing hopper)
+        {
+            List<Thing> foundFeeds = new List<Thing>();
+            foreach (IntVec3 spot in hopper.OccupiedRect())
+            {
+                foreach(Thing thingToCheck in spot.GetThingList(hopper.Map))
+                {
+                    if (Building_NutrientPasteDispenser.IsAcceptableFeedstock(thingToCheck.def))
+                    {
+                        foundFeeds.Add(thingToCheck);
+                    }
+                }
+            }
+            return foundFeeds;
+        }
+
         public static List<Thing> findFeedsInNearbyHoppers(Building_NutrientPasteDispenser __instance)
         {
             List<Thing> foundFeeds = new List<Thing>();
+            List<Thing> AdjHoppers = new List<Thing>();
             for (int i = 0; i < __instance.AdjCellsCardinalInBounds.Count; i++)
             {
-                bool foodFound = false;
-                bool foundHopper = false;
                 IntVec3 c = __instance.AdjCellsCardinalInBounds[i];
 
                 List<Thing> thingsInPosition = c.GetThingList(__instance.Map);
                 List<Thing> feedsInPosition = new List<Thing>();
-                for (int j = 0; j < thingsInPosition.Count; j++)
-                {
-                    Thing thingToCheck = thingsInPosition[j];
-                    if (Building_NutrientPasteDispenser.IsAcceptableFeedstock(thingToCheck.def))
-                    {
 
-                        feedsInPosition.Add(thingToCheck);
-                        foodFound= true;
-                    }
+                foreach(Thing thingToCheck in thingsInPosition)
+                {
                     if (thingToCheck.IsHopper())
                     {
-                        foundHopper = true;
+                        AdjHoppers.Add(thingToCheck);
                     }
                 }
+            }
 
-                if (foodFound && foundHopper)
-                {
-                    foundFeeds.AddRange(feedsInPosition);
-                }
+            foreach (Thing hopper in AdjHoppers)
+            {
+                List<Thing> feedsInHopper = findFeedsInHopper(hopper);
+                foundFeeds.AddRange(feedsInHopper);
             }
             return foundFeeds;
         }
@@ -142,7 +152,7 @@ namespace FridgesAreHoppers
                 nutritionRequired -= (float)nutritionToRemoveFromFeedSource * feedSource.GetStatValue(StatDefOf.Nutrition);
                 ingredientList.Add(feedSource.def);
                 feedSource.SplitOff(nutritionToRemoveFromFeedSource);
-                if (nutritionRequired < 0 )
+                if (nutritionRequired <= 0 )
                 {
                     break;
                 }
@@ -152,7 +162,8 @@ namespace FridgesAreHoppers
             if (nutritionRequired > 0 )
             {
                 __result = null;
-                Log.Error("Something went wrong, didn't have enough nutrition at the end");
+                Log.Error("Something went wrong, didn't have enough nutrition at the end, falling back to vanilla CanDispenseNow()");
+                return true;
             }
 
             __instance.def.building.soundDispense.PlayOneShot(new TargetInfo(__instance.Position, __instance.Map));
@@ -163,6 +174,22 @@ namespace FridgesAreHoppers
                 compIngredients.RegisterIngredient(ingredientList[i]);
             }
             __result = createdNutrientPaste;
+
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(Building_NutrientPasteDispenser))]
+    [HarmonyPatch("FindFeedInAnyHopper", MethodType.Normal)]
+    public static class Building_NutrientPasteDispenser_FindFeedInAnyHopper
+    {
+        public static bool Prefix(Building_NutrientPasteDispenser __instance, ref Thing __result)
+        {
+            List<Thing> feedSources = HarmonyPatches.findFeedsInNearbyHoppers(__instance);
+            if (feedSources.Count > 0 )
+            {
+                __result = feedSources[0];
+            }
 
             return false;
         }
