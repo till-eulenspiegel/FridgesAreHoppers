@@ -1,6 +1,7 @@
 <Patch>
 	<Operation Class="PatchOperationSequence"> 
 		<operations>
+			<!-- Add it as a generic hopper-->
 			<li Class="PatchOperationAdd" MayRequire="Owlchemist.FridgeUtilities">
 				<success>Always</success>
 				<xpath>Defs/ThingDef[@Name="OwlFridgeBase"]/building</xpath>
@@ -8,13 +9,35 @@
 					<isHopper>True</isHopper>
 				</value>
 			</li>
-			<li Class="PatchOperationAdd" MayRequire="rimfridge.kv.rw">
+			<li Class="PatchOperationAdd" MayRequire="sbz.NeatStorageFridge">
 				<success>Always</success>
-				<xpath>Defs/ThingDef[@Name="FridgeBase"]/building</xpath>
+				<xpath>Defs/ThingDef[@Name="sbzFridgeBase"]/building</xpath>
 				<value>
 					<isHopper>True</isHopper>
 				</value>
-			</li>		
+			</li>
+			<!-- Add it to Nutrient Paste Expanded -->
+			<li Class="PatchOperationAdd" MayRequire="Owlchemist.FridgeUtilities, vanillaexpanded.vnutriente">
+				<success>Always</success>s
+				<xpath>Defs/ThingDef[@Name="OwlFridgeBase"]/comps</xpath>
+				<value>
+					<li Class="VNPE.CompProperties_RegisterToGrinder"/>
+				</value>
+			</li>
+			<li Class="PatchOperationAdd" MayRequire="rimfridge.kv.rw, vanillaexpanded.vnutriente">
+				<success>Always</success>
+				<xpath>Defs/ThingDef[@Name="FridgeBase"]/comps</xpath>
+				<value>
+					<li Class="VNPE.CompProperties_RegisterToGrinder"/>
+				</value>
+			</li>
+			<li Class="PatchOperationAdd" MayRequire="sbz.NeatStorageFridge, vanillaexpanded.vnutriente">
+				<success>Always</success>
+				<xpath>Defs/ThingDef[@Name="sbzFridgeBase"]/comps</xpath>
+				<value>
+					<li Class="VNPE.CompProperties_RegisterToGrinder"/>
+				</value>
+			</li>
 		</operations>
 	</Operation>
 </Patch>

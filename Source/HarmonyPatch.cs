@@ -21,26 +21,6 @@ namespace FridgesAreHoppers
 
             var h = new Harmony("com.fridgesarehoppers.rimworld.mod");
             h.PatchAll(Assembly.GetExecutingAssembly());
-
-
-            try
-            {
-                h.Unpatch(AccessTools.Method(typeof(Building_NutrientPasteDispenser), "HasEnoughFeedstockInHoppers"), HarmonyPatchType.Prefix);
-            }
-            catch { }
-
-            try
-            {
-                h.Unpatch(AccessTools.Method(typeof(Building_NutrientPasteDispenser), "FindFeedInAnyHopper"), HarmonyPatchType.Prefix);
-            }
-            catch { }
-
-            try
-            {
-                h.Unpatch(AccessTools.Method(typeof(Alert_PasteDispenserNeedsHopper), "BadDispensers"), HarmonyPatchType.Prefix);
-            }
-            catch { }
-
         }
     }
 

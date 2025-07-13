@@ -4,6 +4,8 @@
 	<author>TillEulenspiegel</author>
 	<supportedVersions>
 		<li>1.4</li>
+		<li>1.5</li>
+		<li>1.6</li>
 	</supportedVersions>
 	<packageId>TE.FridgesAreHoppers.local</packageId>
 	<description>
@@ -19,5 +21,6 @@
 	<loadAfter>
 		<li>Owlchemist.FridgeUtilities</li>
 		<li>rimfridge.kv.rw</li>
+		<li>sbz.NeatStorageFridge</li>
 	</loadAfter>
 </ModMetaData>
